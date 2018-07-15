@@ -27,6 +27,6 @@
     <string name="profile_edt_txt_user_name">User Name</string>
     <string name="profile_edt_txt_user_password">Password</string>
     <string name="icon">Icon</string>
-
+    <string name="location_permission">Permission required</string>
 
 </resources>
