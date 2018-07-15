@@ -12,14 +12,20 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|adjustPan">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ProfileActivity"></activity>
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:windowSoftInputMode="adjustResize|adjustPan">
+
+        </activity>
     </application>
 
 </manifest>
