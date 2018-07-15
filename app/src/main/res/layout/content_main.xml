@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activity.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/welcome_msg"
+                style="@style/home_welcome_msg" />
+
+            <TextView
+                android:id="@+id/welcome_name"
+                style="@style/home_name" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="360dp"
+            android:layout_height="90dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/home_btn_profile"
+                style="@style/home_btn"
+                android:text="@string/home_btn_profile" />
+
+            <Button
+                android:id="@+id/home_btn_land"
+                style="@style/home_btn"
+                android:text="@string/home_btn_land" />
+
+            <Button
+                android:id="@+id/home_btn_crop"
+                style="@style/home_btn"
+                android:text="@string/home_btn_crop" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="360dp"
+            android:layout_height="90dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/home_btn_certification"
+                style="@style/home_btn"
+                android:text="@string/home_btn_cert" />
+
+            <Button
+                android:id="@+id/home_btn_message"
+                style="@style/home_btn"
+                android:text="@string/home_btn_message" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

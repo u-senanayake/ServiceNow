@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Service Now</string>
+    <!--Action Menu-->
+    <string name="action_settings">Settings</string>
+    <!--Activity headers-->
+    <string name="title_activity_main">MainActivity</string>
+    <!--Side Nav Bar-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Service Now</string>
+    <string name="nav_header_subtitle">Skysoft Software Solutions</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <!--Home Button-->
+    <string name="home_btn_profile">My Profile</string>
+    <string name="home_btn_land">Land Details</string>
+    <string name="home_btn_crop">Crop Details</string>
+    <string name="home_btn_cert">me</string>
+    <string name="home_btn_message">Messages</string>
+    <!--Profile Add-->
+    <string name="profile_edt_txt_name_ini">Name With Initial</string>
+    <string name="profile_edt_txt_name">Full Name</string>
+    <string name="profile_edt_txt_address">Address</string>
+    <string name="profile_edt_txt_city">City</string>
+    <string name="profile_edt_txt_dob">Birthday</string>
+    <string name="profile_edt_txt_contact">Contact Number</string>
+    <string name="profile_edt_txt_email">Email Address</string>
+    <string name="profile_edt_txt_user_name">User Name</string>
+    <string name="profile_edt_txt_user_password">Password</string>
+
+
+
+
+</resources>
