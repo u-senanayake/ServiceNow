@@ -59,11 +59,15 @@ public class ProfileActivity extends AppCompatActivity {
 
         mLayout = findViewById(R.id.main_layout);
 
+        //Set Progressbar
         progressDialog = new ProgressDialog(ProfileActivity.this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
+        setLocation();
+
+        //Open datePicker dialog
         profile_dob = findViewById(R.id.profile_edt_txt_dob);
         profile_dob.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,25 +77,27 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        //Add button click listener
         btnAdd = findViewById(R.id.btn_add_profile);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                getGpsLocations();
+                progressDialog.show();
                 addButtonClick();
             }
+
         });
 
     }
 
     private void addButtonClick() {
-        progressDialog.show();
-        latitude = findViewById(R.id.profile_edt_txt_lat);
-        longitude = findViewById(R.id.profile_edt_txt_lon);
 
-        if (longitude.getText() != null && longitude.getText() != null) {
-            progressDialog.dismiss();
-        }
+//        latitude = findViewById(R.id.profile_edt_txt_lat);
+//        longitude = findViewById(R.id.profile_edt_txt_lon);
+//        while (latitude.length()>0){
+//            progressDialog.setMessage("Searching for GPS Location");
+//            progressDialog.show();
+//        }
 
     }
 
@@ -100,6 +106,48 @@ public class ProfileActivity extends AppCompatActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
         profile_dob = findViewById(R.id.profile_edt_txt_dob);
         profile_dob.setText(simpleDateFormat.format(calendar.getTime()));
+    }
+
+
+    private void setFarmer() {
+
+        progressDialog.setMessage("Adding farmer");
+        progressDialog.show();
+        String picUrl, gender;
+        boolean activated = true;
+
+        nameWithInitial = findViewById(R.id.profile_edt_txt_name_ini);
+        fullName = findViewById(R.id.profile_edt_txt_name);
+        address = findViewById(R.id.profile_edt_txt_address);
+        city = findViewById(R.id.profile_edt_txt_city);
+        dob = findViewById(R.id.profile_edt_txt_dob);
+        email = findViewById(R.id.profile_edt_txt_email);
+        userName = findViewById(R.id.profile_edt_txt_user_name);
+        password = findViewById(R.id.profile_edt_txt_user_password);
+        contactNumber = findViewById(R.id.profile_edt_txt_contact);
+
+        latitude = findViewById(R.id.profile_edt_txt_lat);
+        longitude = findViewById(R.id.profile_edt_txt_lon);
+
+        Farmer farmer = new Farmer();
+
+    }
+
+    private void setLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new MyLocationListener();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            progressDialog.setMessage("Relax! We are getting your Location");
+            progressDialog.show();
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
+//            locationManager.removeUpdates(locationListener);
+        } else {
+            requestLocationPermission();
+        }
+
     }
 
     private void requestLocationPermission() {
@@ -121,40 +169,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void getGpsLocations() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            LocationListener locationListener = new MyLocationListener();
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 5000, 10, locationListener);
-        } else {
-            requestLocationPermission();
-        }
-
-    }
-
-    private void setFarmer() {
-        String picUrl, gender;
-        boolean activated = true;
-
-        nameWithInitial = findViewById(R.id.profile_edt_txt_name_ini);
-        fullName = findViewById(R.id.profile_edt_txt_name);
-        address = findViewById(R.id.profile_edt_txt_address);
-        city = findViewById(R.id.profile_edt_txt_city);
-        dob = findViewById(R.id.profile_edt_txt_dob);
-        email = findViewById(R.id.profile_edt_txt_email);
-        userName = findViewById(R.id.profile_edt_txt_user_name);
-        password = findViewById(R.id.profile_edt_txt_user_password);
-        contactNumber = findViewById(R.id.profile_edt_txt_contact);
-
-        latitude = findViewById(R.id.profile_edt_txt_lat);
-        longitude = findViewById(R.id.profile_edt_txt_lon);
-
-        Farmer farmer = new Farmer();
-
-    }
-
     public class MyLocationListener implements LocationListener {
 
         @Override
@@ -167,7 +181,7 @@ public class ProfileActivity extends AppCompatActivity {
             EditText lon = findViewById(R.id.profile_edt_txt_lon);
             lat.setText(String.valueOf(location.getLatitude()));
             lon.setText(String.valueOf(location.getLongitude()));
-
+            progressDialog.dismiss();
         }
 
         @Override
@@ -177,13 +191,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         public void onProviderEnabled(String s) {
-
         }
 
         @Override
         public void onProviderDisabled(String s) {
 
         }
+
     }
 
 }
