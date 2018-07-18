@@ -14,18 +14,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 import skysoft.udayanga.com.servicenow.R;
+import skysoft.udayanga.com.servicenow.adapter.FarmerDbHelp;
+import skysoft.udayanga.com.servicenow.model.City;
 import skysoft.udayanga.com.servicenow.model.Farmer;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -49,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     };
     ProgressDialog progressDialog;
+    FarmerDbHelp helper = new FarmerDbHelp(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +72,10 @@ public class ProfileActivity extends AppCompatActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
         setLocation();
+        fillSpinnerCity();
 
         //Open datePicker dialog
-        profile_dob = findViewById(R.id.profile_edt_txt_dob);
+        profile_dob = findViewById(R.id.profile_enrolled_date);
         profile_dob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void updateDate() {
         String format = "MM/dd/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        profile_dob = findViewById(R.id.profile_edt_txt_dob);
+        profile_dob = findViewById(R.id.profile_enrolled_date);
         profile_dob.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
@@ -119,15 +126,15 @@ public class ProfileActivity extends AppCompatActivity {
         nameWithInitial = findViewById(R.id.profile_edt_txt_name_ini);
         fullName = findViewById(R.id.profile_edt_txt_name);
         address = findViewById(R.id.profile_edt_txt_address);
-        city = findViewById(R.id.profile_edt_txt_city);
-        dob = findViewById(R.id.profile_edt_txt_dob);
-        email = findViewById(R.id.profile_edt_txt_email);
-        userName = findViewById(R.id.profile_edt_txt_user_name);
-        password = findViewById(R.id.profile_edt_txt_user_password);
+//        city = findViewById(R.id.profile_edt_txt_city);
+//        dob = findViewById(R.id.profile_edt_txt_dob);
+//        email = findViewById(R.id.profile_edt_txt_email);
+//        userName = findViewById(R.id.profile_edt_txt_user_name);
+//        password = findViewById(R.id.profile_edt_txt_user_password);
         contactNumber = findViewById(R.id.profile_edt_txt_contact);
 
         latitude = findViewById(R.id.profile_edt_txt_lat);
-        longitude = findViewById(R.id.profile_edt_txt_lon);
+//        longitude = findViewById(R.id.profile_edt_txt_lon);
 
         Farmer farmer = new Farmer();
 
@@ -197,6 +204,19 @@ public class ProfileActivity extends AppCompatActivity {
         public void onProviderDisabled(String s) {
 
         }
+
+    }
+
+    public void fillSpinnerCity() {
+        ArrayList<City> cities = helper.getAllCities();
+        Spinner spinner = findViewById(R.id.citySpinner);
+
+        ArrayList<String> strings = new ArrayList<>();
+        for(int i=0;i<cities.size(); i++){
+            strings.add(cities.get(i).getCity());
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, strings);
+        spinner.setAdapter(dataAdapter);
 
     }
 

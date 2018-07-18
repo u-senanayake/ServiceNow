@@ -11,22 +11,37 @@
     <string name="nav_header_subtitle">Skysoft Software Solutions</string>
     <string name="nav_header_desc">Navigation header</string>
     <!--Home Button-->
-    <string name="home_btn_profile">My Profile</string>
-    <string name="home_btn_land">Land Details</string>
-    <string name="home_btn_crop">Crop Details</string>
-    <string name="home_btn_cert">me</string>
-    <string name="home_btn_message">Messages</string>
+    <string name="home_btn_reg_farmer">Reg New Farmer</string>
+    <string name="home_btn_update_farmer">Update Farmer Profile</string>
+    <string name="home_btn_field_audit">New Field Audit</string>
+    <string name="home_btn_download_farmer">Download Farmer Detail</string>
+    <string name="home_btn_download_field_audit">Download Field Audit</string>
+    <string name="home_btn_download_audit_plan">Download Audit Plan</string>
+    <string name="home_btn_change_password">Change My Password</string>
+    <string name="home_btn_edit_field_audit">Edit Field Audit</string>
+
     <!--Profile Add-->
     <string name="profile_edt_txt_name_ini">Name With Initial</string>
     <string name="profile_edt_txt_name">Full Name</string>
+    <string name="profile_edt_full_name_lan1">Full Name Land 1</string>
     <string name="profile_edt_txt_address">Address</string>
+    <string name="profile_edt_address_lan1">Address Land 1</string>
     <string name="profile_edt_txt_city">City</string>
-    <string name="profile_edt_txt_dob">Birthday</string>
-    <string name="profile_edt_txt_contact">Contact Number</string>
-    <string name="profile_edt_txt_email">Email Address</string>
+    <string name="profile_edt_enrolled_date">Enrolled Date</string>
+    <string name="profile_nic_passport">NIC Or NIC  Number</string>
+    <string name="profile_edt_txt_contact_home">Contact Number Home</string>
+    <string name="profile_edt_txt_contact_mobile">Contact Number Mobile</string>
+    <string name="profile_edit_risk_status">Risk Status</string>
+    <string name="profile_edt_txt_image">Profile Picture</string>
+    <string name="profile_edt_txt_fid">FID</string>
+    <string name="profile_edt_txt_bid">BID</string>
+    <string name="profile_edt_txt_sid">SID</string>
+    <string name="profile_edt_txt_remark">Remark</string>
+
     <string name="profile_edt_txt_user_name">User Name</string>
     <string name="profile_edt_txt_user_password">Password</string>
     <string name="icon">Icon</string>
     <string name="location_permission">Permission required</string>
+    <string name="title_activity_farmer">FarmerActivity</string>
 
 </resources>

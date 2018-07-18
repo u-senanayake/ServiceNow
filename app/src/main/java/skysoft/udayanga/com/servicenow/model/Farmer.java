@@ -1,36 +1,71 @@
 package skysoft.udayanga.com.servicenow.model;
 
 public class Farmer {
-    private int farmerId;
-    private double lattitude;
-    private double longitude;
-    private boolean activated;
-    private String password, userName, email, dob, city, address, gender, picUrl, nameWithInitial, fullName;
-    private double contactNumber;
+    private int farmerId;//above 500000
+    private String farmerCode;//not generate in app
+    private String nameInitial;
+    private String fullName;
+    private String fullNameLan1;
+    private String address;
+    private String addressLan1;
+    private String city;
+    private String gender;
+    private String enrolledDate;
+    private String nicOrPassportNo;
+    private String phoneHome;
+    private String phoneMobile;
+    private String riskStatus;
+    private boolean active;
+    private boolean perchaseActive;
+    private String user;
+    private String imgUrl;
+    private int fid;
+    private int bid;
+    private int sid;
+    private boolean fairtradeStatus;
+    private String remark;
+    private boolean sectioned;
+    private int sectionedType;
+    private String sectionedRemark;
+    private String sectionedDate;
+    private String sectionedBy;
+    private String sectionedAudit;
+    private boolean locked;
 
     public Farmer() {
-
     }
 
-    public Farmer(int farmerId, double lattitude, double longitude,
-                  boolean activated, String password, String userName, String email,
-                  String dob, String city, String address, String gender, String picUrl,
-                  String nameWithInitial, String fullName, double contactNumber) {
+    public Farmer(int farmerId, String farmerCode, String nameInitial, String fullName, String fullNameLan1, String address, String addressLan1, String city, String gender, String enrolledDate, String nicOrPassportNo, String phoneHome, String phoneMobile, String riskStatus, boolean active, boolean perchaseActive, String user, String imgUrl, int fid, int bid, int sid, boolean fairtradeStatus, String remark, boolean sectioned, int sectionedType, String sectionedRemark, String sectionedDate, String sectionedBy, String sectionedAudit, boolean locked) {
         this.farmerId = farmerId;
-        this.lattitude = lattitude;
-        this.longitude = longitude;
-        this.activated = activated;
-        this.password = password;
-        this.userName = userName;
-        this.email = email;
-        this.dob = dob;
-        this.city = city;
-        this.address = address;
-        this.gender = gender;
-        this.picUrl = picUrl;
-        this.nameWithInitial = nameWithInitial;
+        this.farmerCode = farmerCode;
+        this.nameInitial = nameInitial;
         this.fullName = fullName;
-        this.contactNumber = contactNumber;
+        this.fullNameLan1 = fullNameLan1;
+        this.address = address;
+        this.addressLan1 = addressLan1;
+        this.city = city;
+        this.gender = gender;
+        this.enrolledDate = enrolledDate;
+        this.nicOrPassportNo = nicOrPassportNo;
+        this.phoneHome = phoneHome;
+        this.phoneMobile = phoneMobile;
+        this.riskStatus = riskStatus;
+        this.active = active;
+        this.perchaseActive = perchaseActive;
+        this.user = user;
+        this.imgUrl = imgUrl;
+        this.fid = fid;
+        this.bid = bid;
+        this.sid = sid;
+        this.fairtradeStatus = fairtradeStatus;
+        this.remark = remark;
+        this.sectioned = sectioned;
+        this.sectionedType = sectionedType;
+        this.sectionedRemark = sectionedRemark;
+        this.sectionedDate = sectionedDate;
+        this.sectionedBy = sectionedBy;
+        this.sectionedAudit = sectionedAudit;
+        this.locked = locked;
     }
 
     public int getFarmerId() {
@@ -41,100 +76,20 @@ public class Farmer {
         this.farmerId = farmerId;
     }
 
-    public double getLattitude() {
-        return lattitude;
+    public String getFarmerCode() {
+        return farmerCode;
     }
 
-    public void setLattitude(double lattitude) {
-        this.lattitude = lattitude;
+    public void setFarmerCode(String farmerCode) {
+        this.farmerCode = farmerCode;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public String getNameInitial() {
+        return nameInitial;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public boolean isActivated() {
-        return activated;
-    }
-
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDob() {
-        return dob;
-    }
-
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
-    }
-
-    public String getNameWithInitial() {
-        return nameWithInitial;
-    }
-
-    public void setNameWithInitial(String nameWithInitial) {
-        this.nameWithInitial = nameWithInitial;
+    public void setNameInitial(String nameInitial) {
+        this.nameInitial = nameInitial;
     }
 
     public String getFullName() {
@@ -145,32 +100,247 @@ public class Farmer {
         this.fullName = fullName;
     }
 
-    public double getContactNumber() {
-        return contactNumber;
+    public String getFullNameLan1() {
+        return fullNameLan1;
     }
 
-    public void setContactNumber(double contactNumber) {
-        this.contactNumber = contactNumber;
+    public void setFullNameLan1(String fullNameLan1) {
+        this.fullNameLan1 = fullNameLan1;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddressLan1() {
+        return addressLan1;
+    }
+
+    public void setAddressLan1(String addressLan1) {
+        this.addressLan1 = addressLan1;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getEnrolledDate() {
+        return enrolledDate;
+    }
+
+    public void setEnrolledDate(String enrolledDate) {
+        this.enrolledDate = enrolledDate;
+    }
+
+    public String getNicOrPassportNo() {
+        return nicOrPassportNo;
+    }
+
+    public void setNicOrPassportNo(String nicOrPassportNo) {
+        this.nicOrPassportNo = nicOrPassportNo;
+    }
+
+    public String getPhoneHome() {
+        return phoneHome;
+    }
+
+    public void setPhoneHome(String phoneHome) {
+        this.phoneHome = phoneHome;
+    }
+
+    public String getPhoneMobile() {
+        return phoneMobile;
+    }
+
+    public void setPhoneMobile(String phoneMobile) {
+        this.phoneMobile = phoneMobile;
+    }
+
+    public String getRiskStatus() {
+        return riskStatus;
+    }
+
+    public void setRiskStatus(String riskStatus) {
+        this.riskStatus = riskStatus;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isPerchaseActive() {
+        return perchaseActive;
+    }
+
+    public void setPerchaseActive(boolean perchaseActive) {
+        this.perchaseActive = perchaseActive;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public int getFid() {
+        return fid;
+    }
+
+    public void setFid(int fid) {
+        this.fid = fid;
+    }
+
+    public int getBid() {
+        return bid;
+    }
+
+    public void setBid(int bid) {
+        this.bid = bid;
+    }
+
+    public int getSid() {
+        return sid;
+    }
+
+    public void setSid(int sid) {
+        this.sid = sid;
+    }
+
+    public boolean isFairtradeStatus() {
+        return fairtradeStatus;
+    }
+
+    public void setFairtradeStatus(boolean fairtradeStatus) {
+        this.fairtradeStatus = fairtradeStatus;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public boolean isSectioned() {
+        return sectioned;
+    }
+
+    public void setSectioned(boolean sectioned) {
+        this.sectioned = sectioned;
+    }
+
+    public int getSectionedType() {
+        return sectionedType;
+    }
+
+    public void setSectionedType(int sectionedType) {
+        this.sectionedType = sectionedType;
+    }
+
+    public String getSectionedRemark() {
+        return sectionedRemark;
+    }
+
+    public void setSectionedRemark(String sectionedRemark) {
+        this.sectionedRemark = sectionedRemark;
+    }
+
+    public String getSectionedDate() {
+        return sectionedDate;
+    }
+
+    public void setSectionedDate(String sectionedDate) {
+        this.sectionedDate = sectionedDate;
+    }
+
+    public String getSectionedBy() {
+        return sectionedBy;
+    }
+
+    public void setSectionedBy(String sectionedBy) {
+        this.sectionedBy = sectionedBy;
+    }
+
+    public String getSectionedAudit() {
+        return sectionedAudit;
+    }
+
+    public void setSectionedAudit(String sectionedAudit) {
+        this.sectionedAudit = sectionedAudit;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     @Override
     public String toString() {
         return "Farmer{" +
                 "farmerId=" + farmerId +
-                ", lattitude=" + lattitude +
-                ", longitude=" + longitude +
-                ", activated=" + activated +
-                ", password='" + password + '\'' +
-                ", userName='" + userName + '\'' +
-                ", email='" + email + '\'' +
-                ", dob='" + dob + '\'' +
-                ", city='" + city + '\'' +
-                ", address='" + address + '\'' +
-                ", gender='" + gender + '\'' +
-                ", picUrl='" + picUrl + '\'' +
-                ", nameWithInitial='" + nameWithInitial + '\'' +
+                ", farmerCode='" + farmerCode + '\'' +
+                ", nameInitial='" + nameInitial + '\'' +
                 ", fullName='" + fullName + '\'' +
-                ", contactNumber=" + contactNumber +
+                ", fullNameLan1='" + fullNameLan1 + '\'' +
+                ", address='" + address + '\'' +
+                ", addressLan1='" + addressLan1 + '\'' +
+                ", city='" + city + '\'' +
+                ", gender='" + gender + '\'' +
+                ", enrolledDate='" + enrolledDate + '\'' +
+                ", nicOrPassportNo='" + nicOrPassportNo + '\'' +
+                ", phoneHome='" + phoneHome + '\'' +
+                ", phoneMobile='" + phoneMobile + '\'' +
+                ", riskStatus='" + riskStatus + '\'' +
+                ", active=" + active +
+                ", perchaseActive=" + perchaseActive +
+                ", user='" + user + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", fid=" + fid +
+                ", bid=" + bid +
+                ", sid=" + sid +
+                ", fairtradeStatus=" + fairtradeStatus +
+                ", remark='" + remark + '\'' +
+                ", sectioned=" + sectioned +
+                ", sectionedType=" + sectionedType +
+                ", sectionedRemark='" + sectionedRemark + '\'' +
+                ", sectionedDate='" + sectionedDate + '\'' +
+                ", sectionedBy='" + sectionedBy + '\'' +
+                ", sectionedAudit='" + sectionedAudit + '\'' +
+                ", locked=" + locked +
                 '}';
     }
 }

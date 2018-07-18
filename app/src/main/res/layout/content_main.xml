@@ -40,17 +40,17 @@
             <Button
                 android:id="@+id/home_btn_profile"
                 style="@style/home_btn"
-                android:text="@string/home_btn_profile" />
+                android:text="@string/home_btn_reg_farmer" />
 
             <Button
                 android:id="@+id/home_btn_land"
                 style="@style/home_btn"
-                android:text="@string/home_btn_land" />
+                android:text="@string/home_btn_update_farmer" />
 
             <Button
                 android:id="@+id/home_btn_crop"
                 style="@style/home_btn"
-                android:text="@string/home_btn_crop" />
+                android:text="@string/home_btn_field_audit" />
         </LinearLayout>
 
         <LinearLayout
@@ -61,12 +61,32 @@
             <Button
                 android:id="@+id/home_btn_certification"
                 style="@style/home_btn"
-                android:text="@string/home_btn_cert" />
+                android:text="@string/home_btn_download_farmer" />
 
             <Button
                 android:id="@+id/home_btn_message"
                 style="@style/home_btn"
-                android:text="@string/home_btn_message" />
+                android:text="@string/home_btn_download_field_audit" />
+            <Button
+                android:id="@+id/home_btn_download_audit_plan"
+                style="@style/home_btn"
+                android:text="@string/home_btn_download_audit_plan" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="360dp"
+            android:layout_height="90dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/home_btn_change_password"
+                style="@style/home_btn"
+                android:text="@string/home_btn_change_password" />
+
+            <Button
+                android:id="@+id/home_btn_edit_field_audit"
+                style="@style/home_btn"
+                android:text="@string/home_btn_edit_field_audit" />
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
