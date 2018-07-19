@@ -1,4 +1,4 @@
-package skysoft.udayanga.com.servicenow.adapter;
+package skysoft.udayanga.com.servicenow.Dao;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import skysoft.udayanga.com.servicenow.model.Certification;
 import skysoft.udayanga.com.servicenow.model.City;
@@ -69,12 +70,106 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
             keyCode = "code",
             keyDescription = "description";
 
+    private static final String createTableCertificationQry = "CREATE TABLE " + tabelNameCertification + " ( " +
+            keyCetId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+            keyCerName + " TEXT DEFAULT NULL  ," +
+            keySysDate + " DATETIME DEFAULT CURRENT_TIMESTAMP  , " +
+            keyUser + " TEXT, " +
+            keyActive + " INTEGER NOT NULL DEFAULT 1 ) ";
+    private static final String createTableCitiesQry = "CREATE TABLE " + tableNameCities + " ( " +
+            keyCityId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+            keyCountry + " TEXT NOT NULL," +
+            keyCity + " TEXT NOT NULL )";
+    private static final String createTableUnitFQry = "CREATE TABLE " + tableUnitF + " ( " +
+            keyFid + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ," +
+            keyCode + " TEXT NOT NULL," +
+            keyDescription + " TEXT DEFAULT NULL )";
+    private static final String createTableUnitBQry = "CREATE TABLE " + tableUnitB + " ( " +
+            keyBid + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+            keyFid + " INTEGER NOT NULL," +
+            keyCode + " TEXT NOT NULL," +
+            keyDescription + " TEXT DEFAULT NULL ," +
+            " FOREIGN KEY ( " + keyFid + " ) REFERENCES " + tableUnitF + " ( " + keyFid + "))";
+    private static final String createTableUnitSQry = "CREATE TABLE " + tableUnitS + " ( " +
+            keySid + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+            keyBid + " INTEGER NOT NULL, " +
+            keyFid + " INTEGER NOT NULL , " +
+            keyCode + " TEXT NOT NULL , " +
+            keyDescription + " TEXT DEFAULT NULL, " +
+            " FOREIGN KEY ( " + keyFid + " ) REFERENCES " + tableUnitF + " ( " + keyFid + ")," +
+            " FOREIGN KEY ( " + keyBid + " ) REFERENCES " + tableUnitB + " ( " + keyBid + "))";
+
+    private static final String createTableFarmerQry = "CREATE TABLE " + tableNameFarmer + " ( " +
+            keyFarmerId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , " +
+            keyFarmerCode + " TEXT NOT NULL, " +
+            keyNameWithIni + " TEXT NOT NULL, " +
+            keyFullName + " TEXT NOT NULL, " +
+            keyFullNameLan1 + " TEXT DEFAULT NULL," +
+            keyAddress + " TEXT DEFAULT NULL ," +
+            keyAddressLan1 + " TEXT DEFAULT NULL," +
+            keyCityId + " INTEGER NOT NULL," +
+            keyGender + " TEXT NOT NULL," +
+            keyEnrolledDate + " TEXT NOT NULL," +
+            keyNicOrPassport + " TEXT DEFAULT NULL," +
+            keyPhoneHome + " TEXT DEFAULT NULL," +
+            keyPhoneMobile + " TEXT DEFAULT NULL," +
+            keyRiskStatus + " TEXT DEFAULT 'Normal'," +
+            keyActive + " INTEGER NOT NULL DEFAULT 1," +
+            keyPerchaseActive + " INTEGER NOT NULL DEFAULT 0 ," +
+            keyUser + " TEXT NOT NULL," +
+            keyImage + " TEXT ," +
+            keyFid + " INTEGER NOT NULL DEFAULT 0," +
+            keyBid + " INTEGER NOT NULL DEFAULT 0," +
+            keySid + " INTEGER NOT NULL DEFAULT 0," +
+            keyFairtradeStatus + " INTEGER DEFAULT NULL," +
+            keyRemark + " TEXT DEFAULT NULL," +
+            keySanctioned + " INTEGER NOT NULL DEFAULT 0 ," +
+            keySanctionedType + " INTEGER DEFAULT NULL," +
+            keySanctionedRemarks + " TEXT DEFAULT NULL," +
+            keySanctionedDate + " TEXT DEFAULT NULL," +
+            keySanctionedBy + " TEXT DEFAULT NULL," +
+            keySanctionedAudit + " TEXT DEFAULT NULL," +
+            keyLock + " INTEGER DEFAULT 0 ," +
+            " FOREIGN KEY ( " + keyBid + " ) REFERENCES " + tableUnitB + " ( " + keyBid + " ), " +
+            " FOREIGN KEY ( " + keyFid + " ) REFERENCES " + tableUnitF + " ( " + keyFid + " ), " +
+            " FOREIGN KEY ( " + keySid + " ) REFERENCES " + tableUnitS + " ( " + keySid + " )) ";
+    private static final String setIncrementValueFarmerQry ="BEGIN TRANSACTION; " +
+            " UPDATE sqlite_sequence SET seq = 500000 WHERE name = 'farmer';" +
+            " INSERT INTO sqlite_sequence (name,seq) SELECT 'farmer', 500000 WHERE NOT EXISTS (SELECT changes() AS change FROM sqlite_sequence WHERE change <> 0);" +
+            " COMMIT;";
 
     public FarmerDbHelp(Context context) {
         super(context, databaseName, null, databaseVersion);
     }
 
-    private void addData() {
+
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL(createTableCertificationQry);
+        sqLiteDatabase.execSQL(createTableCitiesQry);
+        sqLiteDatabase.execSQL(createTableUnitFQry);
+        sqLiteDatabase.execSQL(createTableUnitBQry);
+        sqLiteDatabase.execSQL(createTableUnitSQry);
+        sqLiteDatabase.execSQL(createTableFarmerQry);
+//        sqLiteDatabase.execSQL(setIncrementValueFarmerQry);
+
+//        addData();
+        Log.d(TAG, "Creating table success");
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableNameCities);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tabelNameCertification);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableUnitB);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableUnitS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableUnitF);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableNameFarmer);
+
+    }
+    public void addData() {
 
         Log.d(TAG, "Adding data to table");
 
@@ -90,7 +185,6 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
         addCertificate(new Certification(11, "USDA-NOP", "2018-07-12 17:55:46", "System", 1));
         addCertificate(new Certification(12, "UTZ", "2018-07-12 17:55:46", "System", 1));
         addCertificate(new Certification(20, "ESR", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(20, "ESR", "2018-07-12 17:55:46", "System", 1));
         addCertificate(new Certification(21, "BSCI", "2018-07-12 17:55:46", "System", 1));
         addCertificate(new Certification(22, "GLOBALG.A.P", "2018-07-12 17:55:46", "System", 1));
         addCertificate(new Certification(23, "Organic - NEW", "2018-07-12 17:55:46", "System", 1));
@@ -99,35 +193,25 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
         addCertificate(new Certification(26, "Organic - IC3", "2018-07-12 17:55:46", "System", 1));
         addCertificate(new Certification(27, "Bio Suisse - BS1", "2018-07-12 17:55:46", "System", 1));
         addCertificate(new Certification(28, "Bio Suisse - BS2", "2018-07-12 17:55:46", "System", 1));
-
+//
         addCity(new City(1, "Sri Lanka", "Kandy"));
         addCity(new City(2, "Sri Lanka", "Colombo"));
         addCity(new City(3, "Sri Lanka", "Galle"));
-
+//
         addUnitF(new UnitF(0, "Undefined", "Undefined"));
-        addUnitF(new UnitF(2, "F2", "Central"));
-        addUnitF(new UnitF(0, "F3", "Downsouth"));
-
+        addUnitF(new UnitF(1, "F2", "Central"));
+        addUnitF(new UnitF(2, "F3", "Downsouth"));
+//
         addUnitB(new UnitB(0, 0, "0", "0"));
         addUnitB(new UnitB(1, 1, "B1", "sesdfe"));
-        addUnitB(new UnitB(0, 0, "B2", "SEE"));
-
+        addUnitB(new UnitB(2, 0, "B2", "SEE"));
+//
         addUnitS(new UnitS(0, 0, 0, "0", "0"));
         addUnitS(new UnitS(1, 1, 1, "S1", "SSDFSES"));
         addUnitS(new UnitS(2, 1, 1, "S2", "SDF"));
         addUnitS(new UnitS(3, 2, 2, "S3", "SER"));
     }
 
-    private String createTableCertification() {
-        Log.d(TAG, "Creating Certification table");
-
-        return "CREATE TABLE " + tabelNameCertification + " ( " +
-                keyCetId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                keyCerName + " TEXT DEFAULT NULL  ," +
-                keySysDate + " DATETIME DEFAULT CURRENT_TIMESTAMP  , " +
-                keyUser + " TEXT, " +
-                keyActive + " INTEGER NOT NULL DEFAULT 1 ) ";
-    }
 
     private void addCertificate(Certification certification) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -141,16 +225,8 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
         database.close();
     }
 
-    private String createTableCities() {
-        Log.d(TAG, "Creating City table");
 
-        return "CREATE TABLE " + tableNameCities + " ( " +
-                keyCityId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                keyCountry + " TEXT NOT NULL," +
-                keyCity + " TEXT NOT NULL )";
-    }
-
-    private void addCity(City city) {
+    public void addCity(City city) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(keyCityId, city.getCityID());
@@ -178,15 +254,17 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
         return cities;
     }
 
-
-    private String createTableUnitF() {
-        //        sqLiteDatabase.execSQL(createTable);
-        Log.d(TAG, "Creating Unit F table");
-
-        return "CREATE TABLE " + tableUnitF + " ( " +
-                keyFid + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ," +
-                keyCode + " TEXT NOT NULL," +
-                keyDescription + " TEXT DEFAULT NULL )";
+    public List<String> getCityList(){
+        String selectQuery = "SELECT  * FROM " + tableNameCities ;
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        List<String> cities= new ArrayList<String>();
+        int i = 0;
+        while (cursor.moveToNext()) {
+            cities.add(cursor.getString(cursor.getColumnIndex(keyCity)));
+            i++;
+        }
+        return cities;
     }
 
     private void addUnitF(UnitF unitF) {
@@ -195,21 +273,10 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
         values.put(keyFid, unitF.getFid());
         values.put(keyCode, unitF.getCode());
         values.put(keyDescription, unitF.getDescription());
-        database.insert(tableNameCities, null, values);
+        database.insert(tableUnitF, null, values);
         database.close();
     }
 
-    private String createTableUnitB() {
-        Log.d(TAG, "Creating Unit B table");
-
-        //        sqLiteDatabase.execSQL(createTable);
-        return "CREATE TABLE " + tableUnitB + " ( " +
-                keyBid + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                keyFid + " INTEGER NOT NULL," +
-                keyCode + " TEXT NOT NULL," +
-                keyDescription + " TEXT DEFAULT NULL ," +
-                " FOREIGN KEY ( " + keyFid + " ) REFERENCES " + tableUnitF + " ( " + keyFid + "))";
-    }
 
     private void addUnitB(UnitB unitB) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -217,24 +284,8 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
         values.put(keyBid, unitB.getBid());
         values.put(keyFid, unitB.getFid());
         values.put(keyCode, unitB.getCode());
-        database.insert(tableNameCities, null, values);
+        database.insert(tableUnitB, null, values);
         database.close();
-    }
-
-
-    private String createTableUnitS() {
-        Log.d(TAG, "Creating Unit S table");
-
-//        sqLiteDatabase.execSQL(createTable);
-        return "CREATE TABLE " + tableUnitS + " ( " +
-                keySid + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                keyBid + " INTEGER NOT NULL, " +
-                keyFid + " INTEGER NOT NULL , " +
-                keyCode + " TEXT NOT NULL , " +
-                keyDescription + " TEXT DEFAULT NULL, " +
-                " FOREIGN KEY ( " + keyFid + " ) REFERENCES " + tableUnitF + " ( " + keyFid + ")," +
-                " FOREIGN KEY ( " + keyBid + " ) REFERENCES " + tableUnitB + " ( " + keyBid + "))";
-
     }
 
     private void addUnitS(UnitS unitS) {
@@ -246,60 +297,10 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
         values.put(keyCode, unitS.getCode());
         values.put(keyDescription, unitS.getDescription());
 
-        database.insert(tableNameCities, null, values);
+        database.insert(tableUnitS, null, values);
         database.close();
     }
 
-    private String createTableFarmer() {
-
-        Log.d(TAG, "Creating Farmer table");
-
-        String createTable = "CREATE TABLE " + tableNameFarmer + " ( " +
-                keyFarmerId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , " +
-                keyFarmerCode + " TEXT NOT NULL, " +
-                keyNameWithIni + " TEXT NOT NULL, " +
-                keyFullName + " TEXT NOT NULL, " +
-                keyFullNameLan1 + " TEXT DEFAULT NULL," +
-                keyAddress + " TEXT DEFAULT NULL ," +
-                keyAddressLan1 + " TEXT DEFAULT NULL," +
-                keyCityId + " INTEGER NOT NULL," +
-                keyGender + " TEXT NOT NULL," +
-                keyEnrolledDate + " TEXT NOT NULL," +
-                keyNicOrPassport + " TEXT DEFAULT NULL," +
-                keyPhoneHome + " TEXT DEFAULT NULL," +
-                keyPhoneMobile + " TEXT DEFAULT NULL," +
-                keyRiskStatus + " TEXT DEFAULT 'Normal'," +
-                keyActive + " INTEGER NOT NULL DEFAULT 1," +
-                keyPerchaseActive + " INTEGER NOT NULL DEFAULT 0 ," +
-                keyUser + " TEXT NOT NULL," +
-                keyImage + " TEXT ," +
-                keyFid + " INTEGER NOT NULL DEFAULT 0," +
-                keyBid + " INTEGER NOT NULL DEFAULT 0," +
-                keySid + " INTEGER NOT NULL DEFAULT 0," +
-                keyFairtradeStatus + " INTEGER DEFAULT NULL," +
-                keyRemark + " TEXT DEFAULT NULL," +
-                keySanctioned + " INTEGER NOT NULL DEFAULT 0 ," +
-                keySanctionedType + " INTEGER DEFAULT NULL," +
-                keySanctionedRemarks + " TEXT DEFAULT NULL," +
-                keySanctionedDate + " TEXT DEFAULT NULL," +
-                keySanctionedBy + " TEXT DEFAULT NULL," +
-                keySanctionedAudit + " TEXT DEFAULT NULL," +
-                keyLock + " INTEGER DEFAULT 0 ," +
-                " FOREIGN KEY ( " + keyBid + " ) REFERENCES " + tableUnitB + " ( " + keyBid + " ), " +
-                " FOREIGN KEY ( " + keyFid + " ) REFERENCES " + tableUnitF + " ( " + keyFid + " ), " +
-                " FOREIGN KEY ( " + keySid + " ) REFERENCES " + tableUnitS + " ( " + keySid + " )) ";
-
-
-        return createTable;
-    }
-
-    private String setIncrementValueFarmer() {
-        return "BEGIN TRANSACTION; " +
-                " UPDATE sqlite_sequence SET seq = 500000 WHERE name = 'farmer';" +
-                " INSERT INTO sqlite_sequence (name,seq) SELECT 'farmer', 500000 WHERE NOT EXISTS (SELECT changes() AS change FROM sqlite_sequence WHERE change <> 0);" +
-                " COMMIT;";
-
-    }
 
     private void addFaermer(Farmer farmer) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -308,22 +309,5 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
 
         database.insert(tableNameCities, null, values);
         database.close();
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(createTableCertification());
-        sqLiteDatabase.execSQL(createTableCities());
-        sqLiteDatabase.execSQL(createTableUnitF());
-        sqLiteDatabase.execSQL(createTableUnitB());
-        sqLiteDatabase.execSQL(createTableUnitS());
-        sqLiteDatabase.execSQL(createTableFarmer());
-        sqLiteDatabase.execSQL(setIncrementValueFarmer());
-        addData();
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
     }
 }

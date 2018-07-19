@@ -24,13 +24,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import skysoft.udayanga.com.servicenow.R;
-import skysoft.udayanga.com.servicenow.adapter.FarmerDbHelp;
-import skysoft.udayanga.com.servicenow.model.City;
+import skysoft.udayanga.com.servicenow.Dao.FarmerDbHelp;
 import skysoft.udayanga.com.servicenow.model.Farmer;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -157,7 +156,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void requestLocationPermission() {
+    public void requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)) {
             Snackbar.make(mLayout, "Permission Required",
@@ -208,16 +207,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void fillSpinnerCity() {
-        ArrayList<City> cities = helper.getAllCities();
+        List<String> cities = helper.getCityList();
         Spinner spinner = findViewById(R.id.citySpinner);
-
-        ArrayList<String> strings = new ArrayList<>();
-        for(int i=0;i<cities.size(); i++){
-            strings.add(cities.get(i).getCity());
-        }
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, strings);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, cities);
         spinner.setAdapter(dataAdapter);
-
     }
 
 }

@@ -38,17 +38,17 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/home_btn_profile"
+                android:id="@+id/home_btn_new_farmer"
                 style="@style/home_btn"
                 android:text="@string/home_btn_reg_farmer" />
 
             <Button
-                android:id="@+id/home_btn_land"
+                android:id="@+id/home_btn_update_farmer"
                 style="@style/home_btn"
                 android:text="@string/home_btn_update_farmer" />
 
             <Button
-                android:id="@+id/home_btn_crop"
+                android:id="@+id/home_btn_new_field_audit"
                 style="@style/home_btn"
                 android:text="@string/home_btn_field_audit" />
         </LinearLayout>
@@ -59,12 +59,12 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/home_btn_certification"
+                android:id="@+id/home_btn_download_farmer"
                 style="@style/home_btn"
                 android:text="@string/home_btn_download_farmer" />
 
             <Button
-                android:id="@+id/home_btn_message"
+                android:id="@+id/home_btn_download_field_audit"
                 style="@style/home_btn"
                 android:text="@string/home_btn_download_field_audit" />
             <Button

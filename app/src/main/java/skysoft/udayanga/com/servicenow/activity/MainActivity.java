@@ -14,11 +14,13 @@ import android.view.View;
 import android.widget.Button;
 
 import skysoft.udayanga.com.servicenow.R;
+import skysoft.udayanga.com.servicenow.Dao.FarmerDbHelp;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Button btn_profile, btn_land, btn_crop, btn_certification, btn_message;
+    private Button btn_new_farmer, btn_update_farmer, btn_crop, btn_certification, btn_message;
+    FarmerDbHelp dbHelp = new FarmerDbHelp(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -36,11 +39,23 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        btn_profile = findViewById(R.id.home_btn_profile);
-        btn_profile.setOnClickListener(new View.OnClickListener() {
+        btn_new_farmer = findViewById(R.id.home_btn_new_farmer);
+        btn_update_farmer = findViewById(R.id.home_btn_update_farmer);
+        btn_new_farmer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            }
+        });
+        btn_update_farmer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                dbHelp.addCity(new City(1, "Sri Lanka", "Kandy"));
+//                System.out.println(cities);
+//                dbHelp.addCity(new City(4, "Sri Lanka", "Colombo"));
+                dbHelp.addData();
+//            dbHelp.addCity(new City(1, "Sri Lanka", "Kandy"));
+
             }
         });
     }
