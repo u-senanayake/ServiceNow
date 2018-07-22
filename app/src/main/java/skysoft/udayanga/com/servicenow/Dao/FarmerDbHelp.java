@@ -101,7 +101,7 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
 
     private static final String createTableFarmerQry = "CREATE TABLE " + tableNameFarmer + " ( " +
             keyFarmerId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , " +
-            keyFarmerCode + " TEXT NOT NULL, " +
+            keyFarmerCode + " TEXT DEFAULT NULL, " +
             keyNameWithIni + " TEXT NOT NULL, " +
             keyFullName + " TEXT NOT NULL, " +
             keyFullNameLan1 + " TEXT DEFAULT NULL," +
@@ -266,7 +266,18 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
         }
         return cities;
     }
-
+    public List<String> getCityIdList(){
+        String selectQuery = "SELECT  * FROM " + tableNameCities ;
+        SQLiteDatabase database = this.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        List<String> cities= new ArrayList<String>();
+        int i = 0;
+        while (cursor.moveToNext()) {
+            cities.add(cursor.getString(cursor.getColumnIndex(keyCityId)));
+            i++;
+        }
+        return cities;
+    }
     private void addUnitF(UnitF unitF) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();

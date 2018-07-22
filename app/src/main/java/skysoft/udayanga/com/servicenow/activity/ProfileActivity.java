@@ -14,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -25,24 +26,30 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
-import skysoft.udayanga.com.servicenow.R;
 import skysoft.udayanga.com.servicenow.Dao.FarmerDbHelp;
-import skysoft.udayanga.com.servicenow.model.Farmer;
+import skysoft.udayanga.com.servicenow.Dao.UnitBDbHelp;
+import skysoft.udayanga.com.servicenow.Dao.UnitFDbHelp;
+import skysoft.udayanga.com.servicenow.Dao.UnitSDbHelp;
+import skysoft.udayanga.com.servicenow.R;
 
 public class ProfileActivity extends AppCompatActivity {
     String TAG = "Profile Activity";
+
+
     Calendar calendar = Calendar.getInstance();
     EditText nameWithInitial, fullName, address, city, profile_dob, dob, email, userName, password, contactNumber;
     EditText latitude, longitude;
-    RadioGroup gender;
-    RadioButton male, female;
+    RadioGroup radioSex;
+    RadioButton radioMale, radioFemale;
     Button btnAdd;
+    Spinner spinnerFid, spinnerBid;
+
     private View mLayout;
     private static final int PERMISSION_REQUEST_LOCATION = 0;
     String lat, lon;
+
     final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int date) {
@@ -54,6 +61,9 @@ public class ProfileActivity extends AppCompatActivity {
     };
     ProgressDialog progressDialog;
     FarmerDbHelp helper = new FarmerDbHelp(this);
+    UnitFDbHelp unitFDbHelp = new UnitFDbHelp(this);
+    UnitBDbHelp unitBDbHelp = new UnitBDbHelp(this);
+    UnitSDbHelp unitSDbHelp = new UnitSDbHelp(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +80,9 @@ public class ProfileActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-        setLocation();
+//        setLocation();
         fillSpinnerCity();
-
+        fillSpinnerUnitF();
         //Open datePicker dialog
         profile_dob = findViewById(R.id.profile_enrolled_date);
         profile_dob.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +103,37 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
         });
+        spinnerFid = findViewById(R.id.profile_edt_txt_fid);
+        spinnerFid.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                unitFSpinnerClick(i);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinnerBid = findViewById(R.id.profile_edt_txt_bid);
+        spinnerBid.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                unitBSpinnerClick(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+    }
+
+    protected void onResume() {
+
+        super.onResume();
+//        setLocation();
     }
 
     private void addButtonClick() {
@@ -105,6 +145,12 @@ public class ProfileActivity extends AppCompatActivity {
 //            progressDialog.show();
 //        }
 
+        radioSex = findViewById(R.id.radioSex);
+        int selectedId = radioSex.getCheckedRadioButtonId();
+//        RadioButton radioButton=findViewById(selectedId);
+        Toast.makeText(ProfileActivity.this,
+                String.valueOf(selectedId), Toast.LENGTH_SHORT).show();
+
     }
 
     private void updateDate() {
@@ -114,30 +160,6 @@ public class ProfileActivity extends AppCompatActivity {
         profile_dob.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
-
-    private void setFarmer() {
-
-        progressDialog.setMessage("Adding farmer");
-        progressDialog.show();
-        String picUrl, gender;
-        boolean activated = true;
-
-        nameWithInitial = findViewById(R.id.profile_edt_txt_name_ini);
-        fullName = findViewById(R.id.profile_edt_txt_name);
-        address = findViewById(R.id.profile_edt_txt_address);
-//        city = findViewById(R.id.profile_edt_txt_city);
-//        dob = findViewById(R.id.profile_edt_txt_dob);
-//        email = findViewById(R.id.profile_edt_txt_email);
-//        userName = findViewById(R.id.profile_edt_txt_user_name);
-//        password = findViewById(R.id.profile_edt_txt_user_password);
-        contactNumber = findViewById(R.id.profile_edt_txt_contact);
-
-        latitude = findViewById(R.id.profile_edt_txt_lat);
-//        longitude = findViewById(R.id.profile_edt_txt_lon);
-
-        Farmer farmer = new Farmer();
-
-    }
 
     private void setLocation() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -179,14 +201,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         @Override
         public void onLocationChanged(Location location) {
-            Toast.makeText(getBaseContext()
+           /* Toast.makeText(getBaseContext()
                     ,
                     "Location changed: Lat: " + location.getLatitude() + " Lng: "
-                            + location.getLongitude(), Toast.LENGTH_SHORT).show();
-            EditText lat = findViewById(R.id.profile_edt_txt_lat);
-            EditText lon = findViewById(R.id.profile_edt_txt_lon);
-            lat.setText(String.valueOf(location.getLatitude()));
-            lon.setText(String.valueOf(location.getLongitude()));
+                            + location.getLongitude(), Toast.LENGTH_SHORT).show();*/
             progressDialog.dismiss();
         }
 
@@ -207,10 +225,43 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void fillSpinnerCity() {
-        List<String> cities = helper.getCityList();
         Spinner spinner = findViewById(R.id.citySpinner);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, cities);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, helper.getCityIdList());
         spinner.setAdapter(dataAdapter);
+    }
+
+    public void fillSpinnerUnitF() {
+        Spinner spinner = findViewById(R.id.profile_edt_txt_fid);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, unitFDbHelp.getUnitFIds());
+        spinner.setAdapter(arrayAdapter);
+    }
+
+    public void fillSpinnerUnitB(int fid) {
+        Spinner spinner = findViewById(R.id.profile_edt_txt_bid);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, unitBDbHelp.getUnitBIdsByFid(fid));
+        spinner.setAdapter(arrayAdapter);
+    }
+
+    public void fillSpinnerUnitS(int fid, int bid) {
+        Spinner spinner = findViewById(R.id.profile_edt_txt_sid);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, unitSDbHelp.getUnitSIdsByFidByBid(fid, bid));
+        spinner.setAdapter(arrayAdapter);
+    }
+
+    private void unitFSpinnerClick(int position) {
+        System.out.println(position);
+        fillSpinnerUnitB(position);
+    }
+
+    private void unitBSpinnerClick(int position) {
+        System.out.println(position);
+        spinnerFid = findViewById(R.id.profile_edt_txt_fid);
+        int fid = Integer.parseInt(spinnerFid.getSelectedItem().toString());
+
+        fillSpinnerUnitS(position, fid);
     }
 
 }

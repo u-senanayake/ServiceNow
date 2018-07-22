@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
 
         btn_new_farmer = findViewById(R.id.home_btn_new_farmer);
         btn_update_farmer = findViewById(R.id.home_btn_update_farmer);
+        btn_crop=findViewById(R.id.home_btn_new_field_audit);
         btn_new_farmer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+
     }
 
     @Override
