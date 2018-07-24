@@ -13,14 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import skysoft.udayanga.com.servicenow.Dao.CreateDbHelp;
 import skysoft.udayanga.com.servicenow.R;
-import skysoft.udayanga.com.servicenow.Dao.FarmerDbHelp;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Button btn_new_farmer, btn_update_farmer, btn_crop, btn_certification, btn_message;
-    FarmerDbHelp dbHelp = new FarmerDbHelp(this);
+    private Button btn_new_farmer, btn_update_farmer;
+    CreateDbHelp dbHelp = new CreateDbHelp(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,22 +41,29 @@ public class MainActivity extends AppCompatActivity
 
         btn_new_farmer = findViewById(R.id.home_btn_new_farmer);
         btn_update_farmer = findViewById(R.id.home_btn_update_farmer);
-        btn_crop=findViewById(R.id.home_btn_new_field_audit);
         btn_new_farmer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                Intent intent = new Intent(MainActivity.this, FarmerActivity.class);
+                intent.putExtra("status", "add");
+                startActivity(intent);
             }
         });
         btn_update_farmer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                dbHelp.addCity(new City(1, "Sri Lanka", "Kandy"));
-//                System.out.println(cities);
-//                dbHelp.addCity(new City(4, "Sri Lanka", "Colombo"));
-                dbHelp.addData();
-//            dbHelp.addCity(new City(1, "Sri Lanka", "Kandy"));
+//                dbHelp.addData();
+                Intent intent = new Intent(MainActivity.this, FarmerActivity.class);
+                intent.putExtra("status", "update");
+                startActivity(intent);
 
+            }
+        });
+        Button button= findViewById(R.id.createDB);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dbHelp.addData();
             }
         });
 

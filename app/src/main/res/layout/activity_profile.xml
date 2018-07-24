@@ -364,7 +364,8 @@
                             <RadioGroup
                                 style="@style/profile_add_edit_text"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:id="@+id/fairtrade_status">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"

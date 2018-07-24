@@ -8,34 +8,39 @@ public class Farmer {
     private String fullNameLan1;
     private String address;
     private String addressLan1;
-    private String city;
+    private int city;
     private String gender;
     private String enrolledDate;
     private String nicOrPassportNo;
     private String phoneHome;
     private String phoneMobile;
     private String riskStatus;
-    private boolean active;
-    private boolean perchaseActive;
+    private int  active;
+    private int perchaseActive;
     private String user;
     private String imgUrl;
     private int fid;
     private int bid;
     private int sid;
-    private boolean fairtradeStatus;
+    private String fairtradeStatus;
     private String remark;
-    private boolean sectioned;
+    private int sectioned;
     private int sectionedType;
     private String sectionedRemark;
     private String sectionedDate;
     private String sectionedBy;
     private String sectionedAudit;
-    private boolean locked;
+    private int locked;
 
     public Farmer() {
     }
 
-    public Farmer(int farmerId, String farmerCode, String nameInitial, String fullName, String fullNameLan1, String address, String addressLan1, String city, String gender, String enrolledDate, String nicOrPassportNo, String phoneHome, String phoneMobile, String riskStatus, boolean active, boolean perchaseActive, String user, String imgUrl, int fid, int bid, int sid, boolean fairtradeStatus, String remark, boolean sectioned, int sectionedType, String sectionedRemark, String sectionedDate, String sectionedBy, String sectionedAudit, boolean locked) {
+    public Farmer(int farmerId, String farmerCode, String nameInitial, String fullName, String fullNameLan1,
+                  String address, String addressLan1, int city, String gender, String enrolledDate,
+                  String nicOrPassportNo, String phoneHome, String phoneMobile, String riskStatus, int active,
+                  int perchaseActive, String user, String imgUrl, int fid, int bid, int sid,
+                  String fairtradeStatus, String remark, int sectioned, int sectionedType, String sectionedRemark,
+                  String sectionedDate, String sectionedBy, String sectionedAudit, int locked) {
         this.farmerId = farmerId;
         this.farmerCode = farmerCode;
         this.nameInitial = nameInitial;
@@ -66,6 +71,31 @@ public class Farmer {
         this.sectionedBy = sectionedBy;
         this.sectionedAudit = sectionedAudit;
         this.locked = locked;
+    }
+
+    public Farmer(String nameInitial, String fullName, String fullNameLan1, String address,
+                  String addressLan1, int city, String gender, String enrolledDate, String nicOrPassportNo,
+                  String phoneHome, String phoneMobile, String riskStatus,
+                  String user, String imgUrl, int fid, int bid, int sid, String fairtradeStatus, String remark) {
+        this.nameInitial = nameInitial;
+        this.fullName = fullName;
+        this.fullNameLan1 = fullNameLan1;
+        this.address = address;
+        this.addressLan1 = addressLan1;
+        this.city = city;
+        this.gender = gender;
+        this.enrolledDate = enrolledDate;
+        this.nicOrPassportNo = nicOrPassportNo;
+        this.phoneHome = phoneHome;
+        this.phoneMobile = phoneMobile;
+        this.riskStatus = riskStatus;
+        this.user = user;
+        this.imgUrl = imgUrl;
+        this.fid = fid;
+        this.bid = bid;
+        this.sid = sid;
+        this.fairtradeStatus = fairtradeStatus;
+        this.remark = remark;
     }
 
     public int getFarmerId() {
@@ -124,11 +154,11 @@ public class Farmer {
         this.addressLan1 = addressLan1;
     }
 
-    public String getCity() {
+    public int getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(int city) {
         this.city = city;
     }
 
@@ -180,19 +210,19 @@ public class Farmer {
         this.riskStatus = riskStatus;
     }
 
-    public boolean isActive() {
+    public int isActive() {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(int active) {
         this.active = active;
     }
 
-    public boolean isPerchaseActive() {
+    public int isPerchaseActive() {
         return perchaseActive;
     }
 
-    public void setPerchaseActive(boolean perchaseActive) {
+    public void setPerchaseActive(int perchaseActive) {
         this.perchaseActive = perchaseActive;
     }
 
@@ -236,11 +266,11 @@ public class Farmer {
         this.sid = sid;
     }
 
-    public boolean isFairtradeStatus() {
+    public String isFairtradeStatus() {
         return fairtradeStatus;
     }
 
-    public void setFairtradeStatus(boolean fairtradeStatus) {
+    public void setFairtradeStatus(String fairtradeStatus) {
         this.fairtradeStatus = fairtradeStatus;
     }
 
@@ -252,11 +282,11 @@ public class Farmer {
         this.remark = remark;
     }
 
-    public boolean isSectioned() {
+    public int isSectioned() {
         return sectioned;
     }
 
-    public void setSectioned(boolean sectioned) {
+    public void setSectioned(int sectioned) {
         this.sectioned = sectioned;
     }
 
@@ -300,11 +330,11 @@ public class Farmer {
         this.sectionedAudit = sectionedAudit;
     }
 
-    public boolean isLocked() {
+    public int isLocked() {
         return locked;
     }
 
-    public void setLocked(boolean locked) {
+    public void setLocked(int locked) {
         this.locked = locked;
     }
 

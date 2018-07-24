@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -28,27 +29,57 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import skysoft.udayanga.com.servicenow.Dao.CreateDbHelp;
 import skysoft.udayanga.com.servicenow.Dao.FarmerDbHelp;
 import skysoft.udayanga.com.servicenow.Dao.UnitBDbHelp;
 import skysoft.udayanga.com.servicenow.Dao.UnitFDbHelp;
 import skysoft.udayanga.com.servicenow.Dao.UnitSDbHelp;
 import skysoft.udayanga.com.servicenow.R;
+import skysoft.udayanga.com.servicenow.model.Farmer;
 
 public class ProfileActivity extends AppCompatActivity {
     String TAG = "Profile Activity";
-
+    private static final String keyFarmerId = "farmer_ID",
+            keyFarmerCode = "famer_code",
+            keyNameWithIni = "name_wt_initials",
+            keyFullName = "full_name",
+            keyFullNameLan1 = "full_name_lan1",
+            keyAddress = "address",
+            keyAddressLan1 = "address_lan1",
+            keyCityId = "cityID",
+            keyGender = "gender",
+            keyEnrolledDate = "enrolled_date",
+            keyNicOrPassport = "nic_or_passport_no",
+            keyPhoneHome = "phone_home",
+            keyPhoneMobile = "phone_mobile",
+            keyRiskStatus = "risk_status",
+            keyActive = "active",
+            keyPerchaseActive = "perchaseActive",
+            keyUser = "user",
+            keyImage = "image",
+            keyFid = "fid",
+            keyBid = "bid",
+            keySid = "sid",
+            keyFairtradeStatus = "fairtrade_status",
+            keyRemark = "Remrks",
+            keySanctioned = "sanctioned",
+            keySanctionedType = "sanctioned_type",
+            keySanctionedRemarks = "sanctioned_remarks",
+            keySanctionedDate = "sanctioned_date",
+            keySanctionedBy = "sanctioned_by",
+            keySanctionedAudit = "sanctioned_Audit",
+            keyLock = "lock";
 
     Calendar calendar = Calendar.getInstance();
-    EditText nameWithInitial, fullName, address, city, profile_dob, dob, email, userName, password, contactNumber;
-    EditText latitude, longitude;
-    RadioGroup radioSex;
+    EditText editNameWithInitial, editFullName, editFullNameLan, editAddress, editAddressLan1, editEnrolledDate, editNicOrPassport,
+            editContactHome, editContactMobile, editRemark;
+    RadioGroup radioSex, fairtradeStatus;
     RadioButton radioMale, radioFemale;
     Button btnAdd;
-    Spinner spinnerFid, spinnerBid;
+    Spinner spinnerFid, spinnerBid, spinnerSid, spinnerCityId, spinnerRiskStatus;
 
     private View mLayout;
     private static final int PERMISSION_REQUEST_LOCATION = 0;
-    String lat, lon;
 
     final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
         @Override
@@ -60,10 +91,12 @@ public class ProfileActivity extends AppCompatActivity {
         }
     };
     ProgressDialog progressDialog;
-    FarmerDbHelp helper = new FarmerDbHelp(this);
+    CreateDbHelp helper = new CreateDbHelp(this);
     UnitFDbHelp unitFDbHelp = new UnitFDbHelp(this);
     UnitBDbHelp unitBDbHelp = new UnitBDbHelp(this);
     UnitSDbHelp unitSDbHelp = new UnitSDbHelp(this);
+    FarmerDbHelp farmerDbHelp = new FarmerDbHelp(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +116,10 @@ public class ProfileActivity extends AppCompatActivity {
 //        setLocation();
         fillSpinnerCity();
         fillSpinnerUnitF();
+        fillVallues();
         //Open datePicker dialog
-        profile_dob = findViewById(R.id.profile_enrolled_date);
-        profile_dob.setOnClickListener(new View.OnClickListener() {
+        editEnrolledDate = findViewById(R.id.profile_enrolled_date);
+        editEnrolledDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new DatePickerDialog(ProfileActivity.this, dateSetListener, calendar.get(Calendar.YEAR),
@@ -138,26 +172,61 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void addButtonClick() {
 
-//        latitude = findViewById(R.id.profile_edt_txt_lat);
-//        longitude = findViewById(R.id.profile_edt_txt_lon);
-//        while (latitude.length()>0){
-//            progressDialog.setMessage("Searching for GPS Location");
-//            progressDialog.show();
-//        }
+        String imgUrl, nameWithIni, fullName, nameLang1, address, addresLan1, gender,
+                enrolledDate, nicNum, contactNum1, contactNum2, risck, fairetradeStatus, remark;
+        double farmerId;
+        String farmerCode, userName, sanType, sanRemark, sanDate, sanBy, sanAudit;
+        int active, purchaseActive, sanctioned, lock, city, fidCode, sidCode, bidCode;
 
-        radioSex = findViewById(R.id.radioSex);
-        int selectedId = radioSex.getCheckedRadioButtonId();
-//        RadioButton radioButton=findViewById(selectedId);
-        Toast.makeText(ProfileActivity.this,
-                String.valueOf(selectedId), Toast.LENGTH_SHORT).show();
+        editNameWithInitial = findViewById(R.id.profile_edt_txt_name_ini);
+        editFullName = findViewById(R.id.profile_edt_txt_name);
+        editFullNameLan = findViewById(R.id.profile_full_name_lan1);
+        editAddress = findViewById(R.id.profile_edt_txt_address);
+        editAddressLan1 = findViewById(R.id.profile_edt_address_lan1);
+        spinnerCityId = findViewById(R.id.citySpinner);
+        editEnrolledDate = findViewById(R.id.profile_enrolled_date);
+        editNicOrPassport = findViewById(R.id.profile_nic_passport);
+        editContactHome = findViewById(R.id.profile_edt_txt_contact_home);
+        editContactMobile = findViewById(R.id.profile_edt_txt_contact_mobile);
+        spinnerRiskStatus = findViewById(R.id.profile_edit_risk_status);
+        spinnerFid = findViewById(R.id.profile_edt_txt_fid);
+        spinnerBid = findViewById(R.id.profile_edt_txt_bid);
+        spinnerSid = findViewById(R.id.profile_edt_txt_sid);
+        editRemark = findViewById(R.id.profile_edt_txt_remark);
 
+
+        nameWithIni = editNameWithInitial.getText().toString();
+        fullName = editFullName.getText().toString();
+        nameLang1 = editFullNameLan.getText().toString();
+        address = editAddress.getText().toString();
+        addresLan1 = editAddressLan1.getText().toString();
+        city = Integer.parseInt(spinnerCityId.getSelectedItem().toString());
+        gender = "m";
+        enrolledDate = editEnrolledDate.getText().toString();
+        nicNum = editNicOrPassport.getText().toString();
+        contactNum1 = editContactHome.getText().toString();
+        contactNum2 = editContactMobile.getText().toString();
+        risck = "test";
+//                spinnerRiskStatus.getSelectedItem().toString();
+        userName = "Udayanga";
+        imgUrl = "Image";
+        fidCode = Integer.parseInt(spinnerFid.getSelectedItem().toString());
+        bidCode = Integer.parseInt(spinnerBid.getSelectedItem().toString());
+        sidCode = Integer.parseInt(spinnerSid.getSelectedItem().toString());
+        fairetradeStatus = "null";
+        remark = editRemark.getText().toString();
+
+        farmerDbHelp.addFarmer(new Farmer(nameWithIni, fullName, nameLang1, address, addresLan1, city, gender,
+                enrolledDate, nicNum, contactNum1, contactNum2, risck, userName, imgUrl, fidCode, bidCode, sidCode, fairetradeStatus, remark));
+        progressDialog.dismiss();
+        Toast.makeText(this, "Farmer Adding Success", Toast.LENGTH_LONG).show();
     }
 
     private void updateDate() {
         String format = "MM/dd/yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        profile_dob = findViewById(R.id.profile_enrolled_date);
-        profile_dob.setText(simpleDateFormat.format(calendar.getTime()));
+        editEnrolledDate = findViewById(R.id.profile_enrolled_date);
+        editEnrolledDate.setText(simpleDateFormat.format(calendar.getTime()));
     }
 
 
@@ -225,30 +294,30 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void fillSpinnerCity() {
-        Spinner spinner = findViewById(R.id.citySpinner);
+        spinnerCityId = findViewById(R.id.citySpinner);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, helper.getCityIdList());
-        spinner.setAdapter(dataAdapter);
+        spinnerCityId.setAdapter(dataAdapter);
     }
 
     public void fillSpinnerUnitF() {
-        Spinner spinner = findViewById(R.id.profile_edt_txt_fid);
+        spinnerFid = findViewById(R.id.profile_edt_txt_fid);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, unitFDbHelp.getUnitFIds());
-        spinner.setAdapter(arrayAdapter);
+        spinnerFid.setAdapter(arrayAdapter);
     }
 
     public void fillSpinnerUnitB(int fid) {
-        Spinner spinner = findViewById(R.id.profile_edt_txt_bid);
+        spinnerBid = findViewById(R.id.profile_edt_txt_bid);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, unitBDbHelp.getUnitBIdsByFid(fid));
-        spinner.setAdapter(arrayAdapter);
+        spinnerBid.setAdapter(arrayAdapter);
     }
 
     public void fillSpinnerUnitS(int fid, int bid) {
-        Spinner spinner = findViewById(R.id.profile_edt_txt_sid);
+        spinnerSid = findViewById(R.id.profile_edt_txt_sid);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, unitSDbHelp.getUnitSIdsByFidByBid(fid, bid));
-        spinner.setAdapter(arrayAdapter);
+        spinnerSid.setAdapter(arrayAdapter);
     }
 
     private void unitFSpinnerClick(int position) {
@@ -264,4 +333,54 @@ public class ProfileActivity extends AppCompatActivity {
         fillSpinnerUnitS(position, fid);
     }
 
+    private void fillVallues() {
+        Intent intent = getIntent();
+        editNameWithInitial = findViewById(R.id.profile_edt_txt_name_ini);
+        editFullName = findViewById(R.id.profile_edt_txt_name);
+        editFullNameLan = findViewById(R.id.profile_full_name_lan1);
+        editAddress = findViewById(R.id.profile_edt_txt_address);
+        editAddressLan1 = findViewById(R.id.profile_edt_address_lan1);
+
+        spinnerCityId = findViewById(R.id.citySpinner);
+
+        radioSex = findViewById(R.id.radioSex);
+
+        editEnrolledDate = findViewById(R.id.profile_enrolled_date);
+        editNicOrPassport = findViewById(R.id.profile_nic_passport);
+        editContactHome = findViewById(R.id.profile_edt_txt_contact_home);
+        editContactMobile = findViewById(R.id.profile_edt_txt_contact_mobile);
+
+        spinnerRiskStatus = findViewById(R.id.profile_edit_risk_status);
+        spinnerFid = findViewById(R.id.profile_edt_txt_fid);
+        spinnerSid = findViewById(R.id.profile_edt_txt_sid);
+        spinnerBid = findViewById(R.id.profile_edt_txt_bid);
+
+        fairtradeStatus = findViewById(R.id.fairtrade_status);
+
+        editRemark = findViewById(R.id.profile_edt_txt_remark);
+////////////////////////////////////////////////////////////////////////
+        editNameWithInitial.setText(intent.getStringExtra(keyNameWithIni));
+        editFullName.setText(intent.getStringExtra(keyFullName));
+        editFullNameLan.setText(intent.getStringExtra(keyFullNameLan1));
+        editAddress.setText(intent.getStringExtra(keyAddress));
+        editAddressLan1.setText(intent.getStringExtra(keyAddressLan1));
+
+        spinnerCityId.setSelection(intent.getIntExtra(keyCityId, 0));
+        if (intent.getStringExtra(keyGender).equals("f")) {
+            radioSex.check(R.id.radioFemale);
+        } else if (intent.getStringExtra(keyGender).equals("m")) {
+            radioSex.check(R.id.radioMale);
+        }
+        editEnrolledDate.setText(intent.getStringExtra(keyEnrolledDate));
+        editNicOrPassport.setText(intent.getStringExtra(keyNicOrPassport));
+        editContactHome.setText(intent.getStringExtra(keyPhoneHome));
+        editContactMobile.setText(intent.getStringExtra(keyPhoneMobile));
+//        editFullName.setText(intent.getStringExtra(keyFullName));//todo risk status
+        spinnerFid.setSelection(intent.getIntExtra(keyFid, 0));
+        spinnerBid.setSelection(intent.getIntExtra(keyBid, 0));
+        spinnerSid.setSelection(intent.getIntExtra(keySid, 0));
+//        editFullName.setText(intent.getStringExtra(keyFullName));//todo fairetrade status
+        editRemark.setText(intent.getStringExtra(keyRemark));
+
+    }
 }

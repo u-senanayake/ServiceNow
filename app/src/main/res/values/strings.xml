@@ -37,6 +37,14 @@
     <string name="profile_edt_txt_bid">BID</string>
     <string name="profile_edt_txt_sid">SID</string>
     <string name="profile_edt_txt_remark">Remark</string>
+<!--Farmer activity-->
+    <string name="farmer_detail">Farmer Detail</string>
+    <string name="farmer_land">Farmer Land Detail</string>
+    <string name="farmer_crop">Farmer Crop Detail</string>
+    <string name="farmer_cert">Farmer Certification Detail</string>
+    <string name="farmer_san">Farmer Sanction</string>
+    <string name="farmer_san2">Farmer Sanction</string>
+
 
     <string name="profile_edt_txt_user_name">User Name</string>
     <string name="profile_edt_txt_user_password">Password</string>

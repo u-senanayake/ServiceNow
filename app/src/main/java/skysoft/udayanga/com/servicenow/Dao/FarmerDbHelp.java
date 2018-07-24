@@ -5,30 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import skysoft.udayanga.com.servicenow.model.Certification;
-import skysoft.udayanga.com.servicenow.model.City;
 import skysoft.udayanga.com.servicenow.model.Farmer;
-import skysoft.udayanga.com.servicenow.model.UnitB;
-import skysoft.udayanga.com.servicenow.model.UnitF;
-import skysoft.udayanga.com.servicenow.model.UnitS;
 
 public class FarmerDbHelp extends SQLiteOpenHelper {
-    String TAG = "Farmer Db Help";
     private static final int databaseVersion = 1;
     private static final String databaseName = "sky_ics_mob";
-    private static String tableNameFarmer = "farmer",
-            tabelNameCertification = "certifications",
-            tableNameCities = "citys",
-            tableUnitB = "unit_b",
-            tableUnitF = "unit_f",
-            tableUnitS = "unit_c";
-
-
+    private static String tableNameFarmer = "farmer";
     private static final String keyFarmerId = "farmer_ID",
             keyFarmerCode = "famer_code",
             keyNameWithIni = "name_wt_initials",
@@ -60,265 +46,164 @@ public class FarmerDbHelp extends SQLiteOpenHelper {
             keySanctionedAudit = "sanctioned_Audit",
             keyLock = "lock";
 
-    private static final String keyCetId = "cer_id",
-            keyCerName = "cert_name",
-            keySysDate = "sys_dat_time";
-    private static final String keyCountry = "country",
-            keyCity = "city";
-
-    private static final String
-            keyCode = "code",
-            keyDescription = "description";
-
-    private static final String createTableCertificationQry = "CREATE TABLE " + tabelNameCertification + " ( " +
-            keyCetId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-            keyCerName + " TEXT DEFAULT NULL  ," +
-            keySysDate + " DATETIME DEFAULT CURRENT_TIMESTAMP  , " +
-            keyUser + " TEXT, " +
-            keyActive + " INTEGER NOT NULL DEFAULT 1 ) ";
-    private static final String createTableCitiesQry = "CREATE TABLE " + tableNameCities + " ( " +
-            keyCityId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-            keyCountry + " TEXT NOT NULL," +
-            keyCity + " TEXT NOT NULL )";
-    private static final String createTableUnitFQry = "CREATE TABLE " + tableUnitF + " ( " +
-            keyFid + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ," +
-            keyCode + " TEXT NOT NULL," +
-            keyDescription + " TEXT DEFAULT NULL )";
-    private static final String createTableUnitBQry = "CREATE TABLE " + tableUnitB + " ( " +
-            keyBid + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-            keyFid + " INTEGER NOT NULL," +
-            keyCode + " TEXT NOT NULL," +
-            keyDescription + " TEXT DEFAULT NULL ," +
-            " FOREIGN KEY ( " + keyFid + " ) REFERENCES " + tableUnitF + " ( " + keyFid + "))";
-    private static final String createTableUnitSQry = "CREATE TABLE " + tableUnitS + " ( " +
-            keySid + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-            keyBid + " INTEGER NOT NULL, " +
-            keyFid + " INTEGER NOT NULL , " +
-            keyCode + " TEXT NOT NULL , " +
-            keyDescription + " TEXT DEFAULT NULL, " +
-            " FOREIGN KEY ( " + keyFid + " ) REFERENCES " + tableUnitF + " ( " + keyFid + ")," +
-            " FOREIGN KEY ( " + keyBid + " ) REFERENCES " + tableUnitB + " ( " + keyBid + "))";
-
-    private static final String createTableFarmerQry = "CREATE TABLE " + tableNameFarmer + " ( " +
-            keyFarmerId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT , " +
-            keyFarmerCode + " TEXT DEFAULT NULL, " +
-            keyNameWithIni + " TEXT NOT NULL, " +
-            keyFullName + " TEXT NOT NULL, " +
-            keyFullNameLan1 + " TEXT DEFAULT NULL," +
-            keyAddress + " TEXT DEFAULT NULL ," +
-            keyAddressLan1 + " TEXT DEFAULT NULL," +
-            keyCityId + " INTEGER NOT NULL," +
-            keyGender + " TEXT NOT NULL," +
-            keyEnrolledDate + " TEXT NOT NULL," +
-            keyNicOrPassport + " TEXT DEFAULT NULL," +
-            keyPhoneHome + " TEXT DEFAULT NULL," +
-            keyPhoneMobile + " TEXT DEFAULT NULL," +
-            keyRiskStatus + " TEXT DEFAULT 'Normal'," +
-            keyActive + " INTEGER NOT NULL DEFAULT 1," +
-            keyPerchaseActive + " INTEGER NOT NULL DEFAULT 0 ," +
-            keyUser + " TEXT NOT NULL," +
-            keyImage + " TEXT ," +
-            keyFid + " INTEGER NOT NULL DEFAULT 0," +
-            keyBid + " INTEGER NOT NULL DEFAULT 0," +
-            keySid + " INTEGER NOT NULL DEFAULT 0," +
-            keyFairtradeStatus + " INTEGER DEFAULT NULL," +
-            keyRemark + " TEXT DEFAULT NULL," +
-            keySanctioned + " INTEGER NOT NULL DEFAULT 0 ," +
-            keySanctionedType + " INTEGER DEFAULT NULL," +
-            keySanctionedRemarks + " TEXT DEFAULT NULL," +
-            keySanctionedDate + " TEXT DEFAULT NULL," +
-            keySanctionedBy + " TEXT DEFAULT NULL," +
-            keySanctionedAudit + " TEXT DEFAULT NULL," +
-            keyLock + " INTEGER DEFAULT 0 ," +
-            " FOREIGN KEY ( " + keyBid + " ) REFERENCES " + tableUnitB + " ( " + keyBid + " ), " +
-            " FOREIGN KEY ( " + keyFid + " ) REFERENCES " + tableUnitF + " ( " + keyFid + " ), " +
-            " FOREIGN KEY ( " + keySid + " ) REFERENCES " + tableUnitS + " ( " + keySid + " )) ";
-    private static final String setIncrementValueFarmerQry ="BEGIN TRANSACTION; " +
-            " UPDATE sqlite_sequence SET seq = 500000 WHERE name = 'farmer';" +
-            " INSERT INTO sqlite_sequence (name,seq) SELECT 'farmer', 500000 WHERE NOT EXISTS (SELECT changes() AS change FROM sqlite_sequence WHERE change <> 0);" +
-            " COMMIT;";
-
     public FarmerDbHelp(Context context) {
         super(context, databaseName, null, databaseVersion);
     }
 
-
-
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(createTableCertificationQry);
-        sqLiteDatabase.execSQL(createTableCitiesQry);
-        sqLiteDatabase.execSQL(createTableUnitFQry);
-        sqLiteDatabase.execSQL(createTableUnitBQry);
-        sqLiteDatabase.execSQL(createTableUnitSQry);
-        sqLiteDatabase.execSQL(createTableFarmerQry);
-//        sqLiteDatabase.execSQL(setIncrementValueFarmerQry);
-
-//        addData();
-        Log.d(TAG, "Creating table success");
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableNameCities);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tabelNameCertification);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableUnitB);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableUnitS);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableUnitF);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + tableNameFarmer);
 
     }
-    public void addData() {
 
-        Log.d(TAG, "Adding data to table");
-
-        addCertificate(new Certification(1, "Bio Suisse", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(2, "Conventional", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(3, "Demeter", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(4, "Ecological", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(5, "FAIRTRADE", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(6, "Inconversion", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(7, "JAS", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(9, "Naturland", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(10, "Organic", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(11, "USDA-NOP", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(12, "UTZ", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(20, "ESR", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(21, "BSCI", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(22, "GLOBALG.A.P", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(23, "Organic - NEW", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(24, "Organic - IC1", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(25, "Organic - IC2", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(26, "Organic - IC3", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(27, "Bio Suisse - BS1", "2018-07-12 17:55:46", "System", 1));
-        addCertificate(new Certification(28, "Bio Suisse - BS2", "2018-07-12 17:55:46", "System", 1));
-//
-        addCity(new City(1, "Sri Lanka", "Kandy"));
-        addCity(new City(2, "Sri Lanka", "Colombo"));
-        addCity(new City(3, "Sri Lanka", "Galle"));
-//
-        addUnitF(new UnitF(0, "Undefined", "Undefined"));
-        addUnitF(new UnitF(1, "F2", "Central"));
-        addUnitF(new UnitF(2, "F3", "Downsouth"));
-//
-        addUnitB(new UnitB(0, 0, "0", "0"));
-        addUnitB(new UnitB(1, 1, "B1", "sesdfe"));
-        addUnitB(new UnitB(2, 0, "B2", "SEE"));
-//
-        addUnitS(new UnitS(0, 0, 0, "0", "0"));
-        addUnitS(new UnitS(1, 1, 1, "S1", "SSDFSES"));
-        addUnitS(new UnitS(2, 1, 1, "S2", "SDF"));
-        addUnitS(new UnitS(3, 2, 2, "S3", "SER"));
-    }
-
-
-    private void addCertificate(Certification certification) {
+    public void addFarmer(Farmer farmer) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(keyCetId, certification.getCerId());
-        values.put(keyCerName, certification.getCerName());
-        values.put(keySysDate, certification.getSysDateTime());
-        values.put(keyUser, certification.getUser());
-        values.put(keyActive, certification.isActive());
-        database.insert(tabelNameCertification, null, values);
+
+//        values.put(keyFarmerId, farmer.getFarmerId());
+//        values.put(keyFarmerCode, farmer.getFarmerCode());
+        values.put(keyNameWithIni, farmer.getNameInitial());
+        values.put(keyFullName, farmer.getFullName());
+        values.put(keyFullNameLan1, farmer.getFullNameLan1());
+        values.put(keyAddress, farmer.getAddress());
+        values.put(keyAddressLan1, farmer.getAddressLan1());
+        values.put(keyCityId, farmer.getCity());
+        values.put(keyGender, farmer.getGender());
+        values.put(keyEnrolledDate, farmer.getEnrolledDate());
+        values.put(keyNicOrPassport, farmer.getNicOrPassportNo());
+        values.put(keyPhoneHome, farmer.getPhoneHome());
+        values.put(keyPhoneMobile, farmer.getPhoneMobile());
+        values.put(keyRiskStatus, farmer.getRiskStatus());
+//        values.put(keyActive, farmer.isActive());
+//        values.put(keyPerchaseActive, farmer.isPerchaseActive());
+        values.put(keyUser, farmer.getUser());
+        values.put(keyImage, farmer.getImgUrl());
+        values.put(keyFid, farmer.getFid());
+        values.put(keyBid, farmer.getBid());
+        values.put(keySid, farmer.getSid());
+        values.put(keyFairtradeStatus, farmer.isFairtradeStatus());
+        values.put(keyRemark, farmer.getRemark());
+//        values.put(keySanctioned, farmer.isSectioned());
+//        values.put(keySanctionedType, farmer.getSectionedType());
+//        values.put(keySanctionedRemarks, farmer.getSectionedRemark());
+//        values.put(keySanctionedDate, farmer.getSectionedDate());
+//        values.put(keySanctionedBy, farmer.getSectionedBy());
+//        values.put(keySanctionedAudit, farmer.getSectionedAudit());
+//        values.put(keyLock, farmer.isLocked());
+        database.insert(tableNameFarmer, null, values);
         database.close();
     }
 
-
-    public void addCity(City city) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(keyCityId, city.getCityID());
-        values.put(keyCountry, city.getCountry());
-        values.put(keyCity, city.getCity());
-        database.insert(tableNameCities, null, values);
-        database.close();
-    }
-
-    public ArrayList<City> getAllCities() {
-        ArrayList<City> cities = new ArrayList<>();
-        String selectQuery = "SELECT  * FROM " + tableNameCities;
+    public List<String> gteFarmerIds() {
+        String selectQuery = "SELECT  * FROM " + tableNameFarmer;
         SQLiteDatabase database = this.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                City city = new City();
-                city.setCityID(cursor.getInt(0));
-                city.setCountry(cursor.getString(1));
-                city.setCity(cursor.getString(2));
-
-            } while (cursor.moveToNext());
-        }
-        return cities;
-    }
-
-    public List<String> getCityList(){
-        String selectQuery = "SELECT  * FROM " + tableNameCities ;
-        SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        List<String> cities= new ArrayList<String>();
+        List<String> ids = new ArrayList<String>();
         int i = 0;
         while (cursor.moveToNext()) {
-            cities.add(cursor.getString(cursor.getColumnIndex(keyCity)));
+            ids.add(cursor.getString(cursor.getColumnIndex(keyFarmerId)));
             i++;
         }
-        return cities;
+        return ids;
     }
-    public List<String> getCityIdList(){
-        String selectQuery = "SELECT  * FROM " + tableNameCities ;
-        SQLiteDatabase database = this.getWritableDatabase();
-        Cursor cursor = database.rawQuery(selectQuery, null);
-        List<String> cities= new ArrayList<String>();
-        int i = 0;
-        while (cursor.moveToNext()) {
-            cities.add(cursor.getString(cursor.getColumnIndex(keyCityId)));
-            i++;
+
+    public Farmer getById(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(tableNameFarmer, new String[]{
+                        keyFarmerId,//0
+                        keyFarmerCode,//1
+                        keyNameWithIni,//2
+                        keyFullName,//3
+                        keyFullNameLan1,//4
+                        keyAddress,//5
+                        keyAddressLan1,//6
+                        keyCityId,//7
+                        keyGender,//8
+                        keyEnrolledDate,//9
+                        keyNicOrPassport,//10
+                        keyPhoneHome,//11
+                        keyPhoneMobile,//12
+                        keyRiskStatus,//13
+                        keyActive,//14
+                        keyPerchaseActive,//15
+                        keyUser, //16
+                        keyImage,//17
+                        keyFid,//18
+                        keyBid,//19
+                        keySid,//20
+                        keyFairtradeStatus,//21
+                        keyRemark,//22
+                        keySanctioned,//23
+                        keySanctionedType,//24
+                        keySanctionedRemarks,//25
+                        keySanctionedDate,//26
+                        keySanctionedBy,//27
+                        keySanctionedAudit,//28
+                        keyLock//29
+                }, keyFarmerId + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+        Farmer farmer = new Farmer();
+        farmer.setFarmerId(Integer.parseInt(cursor.getString(0)));
+        farmer.setFarmerCode(cursor.getString(1));
+        farmer.setNameInitial(cursor.getString(2));
+        farmer.setFullName(cursor.getString(3));
+        farmer.setFullNameLan1(cursor.getString(4));
+        farmer.setAddress(cursor.getString(5));
+        farmer.setAddressLan1(cursor.getString(6));
+        farmer.setCity(Integer.parseInt(cursor.getString(7)));
+        farmer.setGender(cursor.getString(8));
+        farmer.setEnrolledDate(cursor.getString(9));
+        farmer.setNicOrPassportNo(cursor.getString(10));
+        farmer.setPhoneHome(cursor.getString(11));
+        farmer.setPhoneMobile(cursor.getString(12));
+        farmer.setRiskStatus(cursor.getString(13));
+        farmer.setActive(Integer.parseInt(cursor.getString(14)));
+        farmer.setPerchaseActive(Integer.parseInt(cursor.getString(15)));
+        farmer.setUser(cursor.getString(16));
+        farmer.setImgUrl(cursor.getString(17));
+        if (cursor.getString(18) != null) {
+            farmer.setFid(Integer.parseInt(cursor.getString(18)));
+        } else {
+            farmer.setFid(0);
         }
-        return cities;
-    }
-    private void addUnitF(UnitF unitF) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(keyFid, unitF.getFid());
-        values.put(keyCode, unitF.getCode());
-        values.put(keyDescription, unitF.getDescription());
-        database.insert(tableUnitF, null, values);
-        database.close();
-    }
+        if (cursor.getString(19) != null) {
+            farmer.setBid(Integer.parseInt(cursor.getString(19)));
+        } else {
+            farmer.setBid(0);
+        }
+        if (cursor.getString(20) != null) {
+            farmer.setSid(Integer.parseInt(cursor.getString(20)));
+        } else {
+            farmer.setSid(0);
+        }
+        farmer.setFairtradeStatus(cursor.getString(21));
+        farmer.setRemark(cursor.getString(22));
+        if (cursor.getString(23) != null) {
+            farmer.setSectioned(Integer.parseInt(cursor.getString(23)));
+        } else {
+            farmer.setSectioned(0);
+        }
+        if (cursor.getString(24) != null) {
+            farmer.setSectionedType(Integer.parseInt(cursor.getString(24)));
+        } else {
+            farmer.setSectionedType(0);
+        }
+        farmer.setSectionedRemark(cursor.getString(25));
+        farmer.setSectionedDate(cursor.getString(25));
+        farmer.setSectionedBy(cursor.getString(27));
+        farmer.setSectionedAudit(cursor.getString(28));
+        if (cursor.getString(29) != null) {
+            farmer.setActive(Integer.parseInt(cursor.getString(29)));
+        } else {
+            farmer.setActive(1);
+        }
 
-
-    private void addUnitB(UnitB unitB) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(keyBid, unitB.getBid());
-        values.put(keyFid, unitB.getFid());
-        values.put(keyCode, unitB.getCode());
-        database.insert(tableUnitB, null, values);
-        database.close();
-    }
-
-    private void addUnitS(UnitS unitS) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(keySid, unitS.getSid());
-        values.put(keyBid, unitS.getBid());
-        values.put(keyFid, unitS.getFid());
-        values.put(keyCode, unitS.getCode());
-        values.put(keyDescription, unitS.getDescription());
-
-        database.insert(tableUnitS, null, values);
-        database.close();
-    }
-
-
-    private void addFaermer(Farmer farmer) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-
-        database.insert(tableNameCities, null, values);
-        database.close();
+        return farmer;
     }
 }
